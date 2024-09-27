@@ -12,7 +12,7 @@
 
 <h1></h1>
 
-📄 [[ArXiv]](https://arxiv.org/abs/TODO)  |  🎯 [[Project Page]](https://vainf.github.io/maskllm-project-page/)  |  📎 [[License]](LICENSE)
+📄 [[ArXiv]](https://arxiv.org/abs/2409.17481)  |  🎯 [[Project Page]](https://vainf.github.io/maskllm-project-page/)  |  📎 [[License]](LICENSE)
 
 <figure>
   <img src="assets/animation-LQ.gif" alt="MaskLLM" style="width:80%; display:block; margin-left:auto; margin-right:auto;"
@@ -185,10 +185,11 @@ Please see [docs/export_hf.md](docs/export_hf.md) for instructions on exporting 
 ## 3 BibTeX
 
 ```bibtex
-@article{liu2024dora,
-  title={MaskLLM: Learnable Semi-structured Sparsity for Large Language Models},
-  author={},
-  journal={},
-  year={2024}
-}
+@article{
+   fang2024maskllm,
+   title={MaskLLM: Learnable Semi-structured Sparsity for Large Language Models},
+   author={Fang, Gongfan and Yin, Hongxu and Muralidharan, Saurav and Heinrich, Greg and Pool, Jeff and Kautz, Jan and Molchanov, Pavlo and Wang, Xinchao },
+   journal={Advances in Neural Information Processing Systems},
+   year={2024}
+}   
 ```
