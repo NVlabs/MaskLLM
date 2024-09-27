@@ -5,6 +5,9 @@
 
 <h3>MaskLLM: Learnable Semi-structured Sparsity for Large Language Models</h3>
 
+<h4> - NeurIPS 2024 Spotlight - </h4>
+
+
 [Gongfan Fang](https://fangggf.github.io/), [Hongxu Yin](https://hongxu-yin.github.io/), [Saurav Muralidharan](https://www.sauravm.com/),  [Greg Heinrich](https://research.nvidia.com/person/greg-heinrich) <br>
  [Jeff Pool](https://scholar.google.com/citations?user=DagH37xI9soC&hl=en),  [Jan Kautz](https://jankautz.com/),  [Pavlo Molchanov](https://www.pmolchanov.com/), [Xinchao Wang](https://sites.google.com/site/sitexinchaowang/)  
  
