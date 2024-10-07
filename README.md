@@ -28,7 +28,16 @@
 
 ## 0. What is MaskLLM
 
-This work introduces MaskLLM, a **learnable** pruning method that establishes **Semi-structured (or ``N:M'') Sparsity** in LLMs, aimed at reducing computational overhead during inference. 
+This work introduces MaskLLM, a **learnable** pruning method that establishes **Semi-structured (or ``N:M'') Sparsity** in LLMs, aimed at reducing computational overhead during inference. The proposed method is scalable and stands to benefit from larger training datasets.
+
+<div align="center">
+<figure>
+ <img src="https://github.com/user-attachments/assets/cb71c637-e880-4669-a4ee-3ffee933718c" alt="Scalability" style="width:65%; display:block; margin-left:auto; margin-right:auto;"
+</figure>
+<figure>
+  <img src="https://github.com/user-attachments/assets/a571002b-c6ba-46c5-a0ba-06433485d410" alt="Scalability" style="width:30%; display:block; margin-left:auto; margin-right:auto;"
+</figure>
+</div>
 
 ## 1. Run MaskLLM with Megatron-LM
 
