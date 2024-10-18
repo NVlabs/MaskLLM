@@ -197,11 +197,10 @@ Please see [docs/export_hf.md](docs/export_hf.md) for instructions on exporting 
 ## 3 BibTeX
 
 ```bibtex
-@article{
-   fang2024maskllm,
-   title={MaskLLM: Learnable Semi-structured Sparsity for Large Language Models},
-   author={Fang, Gongfan and Yin, Hongxu and Muralidharan, Saurav and Heinrich, Greg and Pool, Jeff and Kautz, Jan and Molchanov, Pavlo and Wang, Xinchao },
-   journal={Advances in Neural Information Processing Systems},
-   year={2024}
-}   
+@article{fang2024maskllm,
+  title={MaskLLM: Learnable Semi-Structured Sparsity for Large Language Models},
+  author={Fang, Gongfan and Yin, Hongxu and Muralidharan, Saurav and Heinrich, Greg and Pool, Jeff and Kautz, Jan and Molchanov, Pavlo and Wang, Xinchao},
+  journal={arXiv preprint arXiv:2409.17481},
+  year={2024}
+}
 ```
