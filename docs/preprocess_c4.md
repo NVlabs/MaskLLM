@@ -74,7 +74,7 @@ bash scripts/data/prepare_c4_megatron_llama3.py
 ```
 
 ```bash
-assets/data/preprocessed/
+assets/data/preprocessed_llama3/
 ├── llama3_00000_text_document.bin
 ├── llama3_00000_text_document.idx
 ├── llama3_00001_text_document.bin
