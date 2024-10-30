@@ -67,7 +67,7 @@ To use this in Megatron-LM, we provide a blending file [assets/c4-blend.sh](asse
 
 ### Pre-processing for LLaMA-3
 
-The proprecessing for LLaMA-3 is similar to LLaMA-2, but with a different script.
+The preprocessing for LLaMA-3 closely resembles that of LLaMA-2, albeit with a modified script. Notably, LLaMA-3 employs a [new tokenizer](https://huggingface.co/meta-llama/Meta-Llama-3-8B/tree/main) and ``tokenizer.model`` is no longer used. Instead, the new ``tokenizer.json`` will be loaded with [AutoTokenizer](https://github.com/NVlabs/MaskLLM/blob/main/megatron/tokenizer/auto_tokenization.py). Thus, you will find that the script accepts a folder name ``--tokenizer-model ./assets/checkpoints/llama3_8b_hf`` to load the new tokenizer.
 
 ```bash
 bash tools/prepare_c4_megatron_llama3.py
