@@ -63,7 +63,7 @@ assets/data/preprocessed/
 ...
 ```
 
-To use this in Megatron-LM, we provide a blending file [assets/c4-blend.sh](assets/c4-blend.sh) for training. 
+To use this in Megatron-LM, we provide a blending file [assets/c4-blend.sh](../assets/c4-blend.sh) for training. 
 
 ### Pre-processing for LLaMA-3
 
@@ -87,6 +87,8 @@ assets/data/preprocessed_llama3/
 ├── llama3_00004_text_document.idx
 ...
 ```
+
+The blending file can be also found at [assets/c4-blend-llama3.sh](../assets/c4-blend-llama3.sh). 
 
 
 
