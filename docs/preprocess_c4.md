@@ -35,7 +35,7 @@ assets/data/c4
 
 ### Requirements
 
-We use [``pytorch:24.01-py3``](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-24-01.html) as the base image. Please make sure you have installed docker.
+We use [``pytorch:24.01-py3``](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-24-01.html) as the base image. Please make sure you have installed docker. More details can be found in [NVIDIA/Megatron-LM](https://github.com/NVIDIA/Megatron-LM?tab=readme-ov-file#data-preprocessing).
 
 Install additional packages:
 ```bash
