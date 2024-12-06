@@ -50,16 +50,16 @@ bash scripts/data/prepare_c4_megatron_llama2.py
 
 ```bash
 assets/data/preprocessed/
-├── llama2_00000_text_document.bin
-├── llama2_00000_text_document.idx
-├── llama2_00001_text_document.bin
-├── llama2_00001_text_document.idx
-├── llama2_00002_text_document.bin
-├── llama2_00002_text_document.idx
-├── llama2_00003_text_document.bin
-├── llama2_00003_text_document.idx
-├── llama2_00004_text_document.bin
-├── llama2_00004_text_document.idx
+├── c4_llama2_00000_text_document.bin
+├── c4_llama2_00000_text_document.idx
+├── c4_llama2_00001_text_document.bin
+├── c4_llama2_00001_text_document.idx
+├── c4_llama2_00002_text_document.bin
+├── c4_llama2_00002_text_document.idx
+├── c4_llama2_00003_text_document.bin
+├── c4_llama2_00003_text_document.idx
+├── c4_llama2_00004_text_document.bin
+├── c4_llama2_00004_text_document.idx
 ...
 ```
 
@@ -75,20 +75,24 @@ bash scripts/data/prepare_c4_megatron_llama3.py
 
 ```bash
 assets/data/preprocessed_llama3/
-├── llama3_00000_text_document.bin
-├── llama3_00000_text_document.idx
-├── llama3_00001_text_document.bin
-├── llama3_00001_text_document.idx
-├── llama3_00002_text_document.bin
-├── llama3_00002_text_document.idx
-├── llama3_00003_text_document.bin
-├── llama3_00003_text_document.idx
-├── llama3_00004_text_document.bin
-├── llama3_00004_text_document.idx
+├── c4_llama3_00000_text_document.bin
+├── c4_llama3_00000_text_document.idx
+├── c4_llama3_00001_text_document.bin
+├── c4_llama3_00001_text_document.idx
+├── c4_llama3_00002_text_document.bin
+├── c4_llama3_00002_text_document.idx
+├── c4_llama3_00003_text_document.bin
+├── c4_llama3_00003_text_document.idx
+├── c4_llama3_00004_text_document.bin
+├── c4_llama3_00004_text_document.idx
 ...
 ```
 
 The blending file can be also found at [assets/c4-blend-llama3.sh](../assets/c4-blend-llama3.sh). 
 
 
+### Pre-processing for LLaMA-3.1
 
+```bash
+bash scripts/data/prepare_c4_megatron_llama3.1.py
+```

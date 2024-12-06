@@ -1,0 +1,9 @@
+assets/cache
+assets/checkpoints
+assets/data
+CACHE
+output
+__pycache__
+megatron/fused_kernels/build
+megatron/core/datasets/helpers.cpython-310-x86_64-linux-gnu.so
+wandb

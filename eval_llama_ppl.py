@@ -244,8 +244,13 @@ def main():
                 k_original = k.replace(".mask", "")
                 model_state[k_original] *= v.to(model_state[k_original].device).float()
             model.load_state_dict(model_state)
-        elif args.mask.endswith(".npz"): # compressed mask ckpt, this will be much smaller (~500MB for 7b model)
-            mask_ckpt = np.load(args.mask)
+        else:
+            if args.mask.endswith(".npz"): # compressed mask ckpt, this will be much smaller (~500MB for 7b model)
+                mask_ckpt = np.load(args.mask)
+            else:
+                from huggingface_hub import hf_hub_download
+                downloaded_mask = hf_hub_download(repo_id=args.mask, filename="mask_compressed.npz") 
+                mask_ckpt = np.load(downloaded_mask)
             model_state = model.state_dict()
             for k, v in mask_ckpt.items():
                 k_original = k.replace(".mask", "")
@@ -253,7 +258,7 @@ def main():
                 mask = torch.from_numpy(v).to(model_state[k_original].device).float()
                 mask = mask.view(*model_state[k_original].shape) # reshape the mask
                 model_state[k_original] *= mask # apply the mask
-            model.load_state_dict(model_state)           
+            model.load_state_dict(model_state) 
     model.eval()
 
     for name, param in model.named_parameters():

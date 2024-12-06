@@ -39,18 +39,69 @@ This work introduces MaskLLM, a **learnable** pruning method that establishes **
 </figure>
 </div>
 
-## 1. Run MaskLLM with Megatron-LM
+## 1. Pre-trained Masks For Huggingface Models 🔥🔥🔥
+
+### Requirements
+We provide pre-computed masks for Huggingface Models such as Llama-2 7B and Llama-3 8B with the minimum requirements. It will not involve docker, Megatron or data preprocessing. 
+```bash
+pip install transformers accelerate datasets SentencePiece 
+```
+
+### Pre-computed Masks
+
+The following masks were trained and provided by [@VainF](https://github.com/VainF). We use ``huggingface_hub`` to automatically download those masks and apply them to offcical LLMs for evaluation. Those mask files were compressed using [numpy.savez_compressed](tool_compress_mask.py). More results for baselines (SparseGPT, Wanda) can be found in the appendix.
+| Model | Pattern | Training Data | Training/Eval SeqLen | PPL (Dense) | PPL (SparseGPT) | **PPL (MaskLLM)** | Link |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| LLaMA-2 7B | 2:4 | C4 (2B Tokens)| 4096 | 5.12 | 10.42 | **6.78** | [HuggingFace](https://huggingface.co/Vinnnf/LLaMA-2-7B-MaskLLM-C4) |
+| LLaMA-3 8B | 2:4 | C4 (2B Tokens) | 4096 | 5.75 | 17.64 | **8.49** | [HuggingFace]() |
+| LLaMA-3.1 8B | 2:4 | C4 (2B Tokens) | 4096 | - | - | - | Comming Soon |
+
+```bash
+# LLaMA-3 8B, Wikitext-2 PPL=8.49
+python eval_llama_ppl.py --model meta-llama/Meta-Llama-3-8B --mask Vinnnf/LLaMA-3-8B-MaskLLM-C4
+
+# LLaMA-2 7B, Wikitext-2 PPL=6.78
+python eval_llama_ppl.py --model meta-llama/Llama-2-7b-hf --mask Vinnnf/LLaMA-2-7B-MaskLLM-C4
+```
+
+Output:
+```bash
+torch 2.5.1
+transformers 4.44.2
+accelerate 0.33.0
+# of gpus:  8
+loading llm model meta-llama/Meta-Llama-3-8B
+Loading checkpoint shards: 100%|█████████| 4/4 [00:06<00:00,  1.74s/it]
+mask_compressed.npz: 100%|█████████| 591M/591M [00:51<00:00, 11.6MB/s
+...
+model.layers.31.mlp.up_proj.weight - sparsity 0.5000
+model.layers.31.mlp.down_proj.weight - sparsity 0.5000
+model.layers.31.input_layernorm.weight - sparsity 0.0000
+model.layers.31.post_attention_layernorm.weight - sparsity 0.0000
+model.norm.weight - sparsity 0.0000
+lm_head.weight - sparsity 0.0000
+use device  cuda:0
+evaluating on wikitext2
+nsamples 70
+sample 0
+sample 50
+wikitext perplexity 8.485933303833008
+```
+
+More masks learned on public datasets will be released in the future.
+
+## 2. Run MaskLLM with Megatron-LM 🚀🚀🚀
 
 The following section provides an example for MaskLLM-LLaMA-2/3 on a single node with 8 GPUs. The LLaMA model will be shard across 8 GPUs with tensor parallelism, taking ~40GB per GPU for end-to-end training. 
 
-### 1.1 Docker Image
+### 2.1 Docker Image
 
 Docker is required for Megatron-LM. We use the official PyTorch docker image [``pytorch:24.01-py3``](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-24-01.html) from NVIDIA NGC as the base image. If you can not use docker, please refer to the [official setup instructions in Megatron-LM](https://github.com/NVIDIA/Megatron-LM?tab=readme-ov-file#setup). Run the following command to download & start the docker container and mount your home directory.
 ```bash
 docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 -v $HOME:$HOME -it --rm nvcr.io/nvidia/pytorch:24.01-py3
 ```
 
-### 1.2 Prepare LLaMA Checkpoints
+### 2.2 Prepare LLaMA Checkpoints
 
 In the container, we need to download the LLaMA checkpoints and convert them to Megatron format.
 
@@ -58,7 +109,7 @@ In the container, we need to download the LLaMA checkpoints and convert them to 
 
 Install basic dependencies.
 ```bash
-pip install transformers accelerate datasets SentencePiece wandb tqdm ninja tensorboardx==2.6 pulp timm einops
+pip install transformers accelerate datasets SentencePiece wandb tqdm ninja tensorboardx==2.6 pulp timm einops nltk
 ```
 
 The following scripts download and save all HF checkpoints at ``./assets/checkpoints``.
@@ -66,15 +117,20 @@ The following scripts download and save all HF checkpoints at ``./assets/checkpo
 python scripts/tools/download_llama2_7b_hf.py 
 python scripts/tools/download_llama2_13b_hf.py
 python scripts/tools/download_llama3_8b_hf.py
+python scripts/tools/download_llama3.1_8b_hf.py
 ```
-
 ```bash
 assets
 ├── checkpoints
 │   ├── llama2_13b_hf
 │   ├── llama2_7b_hf
-│   └── llama3_8b_hf
+│   ├── llama3_8b_hf
+│   └── llama3.1_8b_hf
 ```
+
+Tips: If you would like to use the Huggingface cache, link the "~/.cache/huggingface/hub" to "assets/checkpoints": `ln -s $HOME/.cache/huggingface/hub assets/cache`
+
+
 
 #### Convert HF to Megatron
 
@@ -83,6 +139,7 @@ Convert the downloaded HF checkpoint to Megatron format, with `tp=8` for tensor 
 bash scripts/tools/convert_llama2_7b_hf_to_megatron.sh 
 bash scripts/tools/convert_llama2_13b_hf_to_megatron.sh 
 bash scripts/tools/convert_llama3_8b_hf_to_megatron.sh
+bash scripts/tools/convert_llama3.1_8b_hf_to_megatron.sh
 ```
 
 ```bash
@@ -93,14 +150,20 @@ assets/
 │   ├── llama2_7b_hf
 │   ├── llama2_7b_megatron_tp8
 │   ├── llama3_8b_hf
-│   └── llama3_8b_megatron_tp8
+│   ├── llama3_8b_megatron_tp8
+│   ├── llama3.1_8b_hf
+│   └── llama3.1_8b_megatron_tp8
 ```
 
 Evaluate the dense model with the arguments `size (7b/8b/13b)`, `tensor parallelism (8)`, and `sparsity (dense or sparse)`.
 ```bash
 bash scripts/ppl/evaluate_llama2_wikitext2.sh assets/checkpoints/llama2_7b_megatron_tp8 7b 8 dense
+
 bash scripts/ppl/evaluate_llama2_wikitext2.sh assets/checkpoints/llama2_13b_megatron_tp8 13b 8 dense
+
 bash scripts/ppl/evaluate_llama3_wikitext2.sh assets/checkpoints/llama3_8b_megatron_tp8 8b 8 dense
+
+bash scripts/ppl/evaluate_llama3.1_wikitext2.sh assets/checkpoints/llama3.1_8b_megatron_tp8 8b 8 dense
 ```
 
 
@@ -113,16 +176,19 @@ validation results on WIKITEXT2 | avg loss: 1.5202E+00 | ppl: 4.5730E+00 | adjus
 
 # Outputs for LLaMA-3 8B:
 validation results on WIKITEXT2 | avg loss: 1.7512E+00 | ppl: 5.7615E+00 | adjusted ppl: 5.7615E+00 | token ratio: 1.0 |
+
+# Outputs for LLaMA-3.1 8B 
+validation results on WIKITEXT2 | avg loss: 1.7730E+00 | ppl: 5.8887E+00 | adjusted ppl: 5.8887E+00 | token ratio: 1.0 |
 ```
 
 
-### 1.3 Pre-tokenize C4 Data for Megatron
+### 2.3 Pre-tokenize C4 Data for Megatron
 
 Our paper uses a blended internal data for training. For reproducibility, we provide an example of learning masks on a subset of the public [allenai/c4](https://huggingface.co/datasets/allenai/c4) dataset. Corresponding results can be found in Appendix D of our paper. Please see [docs/preprocess_c4.md](docs/preprocess_c4.md) for the instructions.
 
-### 1.4 Generate prior masks 
+### 2.4 Generate prior masks 
 
-It is encouraged to start training with a prior mask, either generated by [SparseGPT](https://arxiv.org/abs/2301.00774), [Wanda](https://arxiv.org/abs/2306.11695) or Magnitude Pruning. The following scripts prune an LLaMA-2 7B model with 2:4 patterns. For SparseGPT, weight update is disabled. Add an argument ``--update-weight`` if necessary. More scripts for LLaMA-2 13B and LLaMA-3 8B are available at [scripts/oneshot](scripts/oneshot).
+It is encouraged to start training with a prior mask, either generated by [SparseGPT](https://arxiv.org/abs/2301.00774), [Wanda](https://arxiv.org/abs/2306.11695) or Magnitude Pruning. The following scripts prune an LLaMA-2 7B model with 2:4 patterns. For SparseGPT, weight update is disabled. Add an argument ``--update-weight`` if necessary. More similar scripts for LLaMA-2 13B, LLaMA-3 8B and LLaMA-3.1 8B are available at [scripts/oneshot](scripts/oneshot).
 ```bash
 # <= SparseGPT mask
 bash scripts/oneshot/run_llama2_7b_prune_tp8.sh hessian # --update-weight 
@@ -149,7 +215,7 @@ To evaluate the pruned model:
 ```bash
 bash scripts/ppl/evaluate_llama2_wikitext2.sh output/oneshot_pruning/checkpoint/llama2-7b-tp8.sparse.nmprune.sp0.5hessian.ex0 7b 8 sparse
 ```
-### 1.5 MaskLLM Training
+### 2.5 MaskLLM Training
 
 
 Mask Sampling          | Visualization
@@ -167,7 +233,7 @@ bash scripts/learnable_sparsity/llama2_7b_mask_only_tp8_c4.sh 0
 bash scripts/learnable_sparsity/llama2_7b_mask_only_tp8_c4.sh 1
 ```
 
-### 1.6 Trim the checkpoint 
+### 2.6 Trim the checkpoint 
 
 For inference, we only need those winner masks with the highest probability. The following command will trim the checkpoint and remove unnecessary components. 
 ```bash
@@ -175,7 +241,7 @@ python tool_trim_learnable_sparsity.py --ckpt_dir output/checkpoints/llama2-7b-t
 ```
 Please modify the content in ``latest_checkpointed_iteration.txt`` as ``release`` for loading. This will set up a clean checkpoint with additional ``.mask`` parameters for each sparse layer.
 
-### 1.7 To evaluate the MaskLLM model:
+### 2.7 To evaluate the MaskLLM model:
 ```bash
 # For llama2 7b & 13b
 bash scripts/ppl/evaluate_llama2_wikitext2.sh output/checkpoints/llama2-7b-tp8-mask-only-c4-singlenode/train_iters_2000/ckpt/ 7b 8 sparse
@@ -186,15 +252,15 @@ bash scripts/ppl/evaluate_llama2_wikitext2.sh output/checkpoints/llama2-13b-tp8-
 bash scripts/ppl/evaluate_llama3_wikitext2.sh output/checkpoints/llama3-8b-tp8-mask-only-c4-singlenode/train_iters_2000/ckpt/ 8b 8 sparse
 ```
 
-### 1.8 Export to HF (Optional)
+### 2.8 Export to HF (Optional)
 
 Please see [docs/export_hf.md](docs/export_hf.md) for instructions on exporting sparse models to Huggingface.
 
-## 2 Key Results
+## 3 Key Results
 
 ![exp](assets/exp_results.png)
 
-## 3 BibTeX
+## 4 BibTeX
 
 ```bibtex
 @article{fang2024maskllm,
