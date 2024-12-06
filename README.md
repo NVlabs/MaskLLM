@@ -53,7 +53,7 @@ The following masks were trained and provided by [@VainF](https://github.com/Vai
 | Model | Pattern | Training Data | Training/Eval SeqLen | PPL (Dense) | PPL (SparseGPT) | **PPL (MaskLLM)** | Link |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | LLaMA-2 7B | 2:4 | C4 (2B Tokens)| 4096 | 5.12 | 10.42 | **6.78** | [HuggingFace](https://huggingface.co/Vinnnf/LLaMA-2-7B-MaskLLM-C4) |
-| LLaMA-3 8B | 2:4 | C4 (2B Tokens) | 4096 | 5.75 | 17.64 | **8.49** | [HuggingFace]() |
+| LLaMA-3 8B | 2:4 | C4 (2B Tokens) | 4096 | 5.75 | 17.64 | **8.49** | [HuggingFace](https://huggingface.co/Vinnnf/LLaMA-3-8B-MaskLLM-C4) |
 | LLaMA-3.1 8B | 2:4 | C4 (2B Tokens) | 4096 | - | - | - | Comming Soon |
 
 ```bash
