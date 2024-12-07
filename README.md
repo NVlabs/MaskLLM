@@ -49,7 +49,7 @@ pip install transformers accelerate datasets SentencePiece
 
 ### Pre-computed Masks
 
-The following masks were trained and provided by [@VainF](https://github.com/VainF). We use ``huggingface_hub`` to automatically download those masks and apply them to offcical LLMs for evaluation. Those mask files were compressed using [numpy.savez_compressed](tool_compress_mask.py). More results for baselines (SparseGPT, Wanda) can be found in the appendix.
+The following masks were trained and provided by [@VainF](https://github.com/VainF). We use ``huggingface_hub`` to automatically download those masks and apply them to official LLMs for evaluation. Those mask files were compressed using [numpy.savez_compressed](tool_compress_mask.py). More results for baselines (SparseGPT, Wanda) can be found in the appendix.
 | Model | Pattern | Training Data | Training/Eval SeqLen | PPL (Dense) | PPL (SparseGPT) | **PPL (MaskLLM)** | Link |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | LLaMA-2 7B | 2:4 | C4 (2B Tokens)| 4096 | 5.12 | 10.42 | **6.78** | [Hugging Face](https://huggingface.co/Vinnnf/LLaMA-2-7B-MaskLLM-C4) |
