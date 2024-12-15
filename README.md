@@ -15,7 +15,7 @@
 
 <h1></h1>
 
-📄 [[ArXiv]](https://arxiv.org/abs/2409.17481)  |  🎯 [[Project Page]](https://vainf.github.io/maskllm-project-page/)  |  📎 [[License]](LICENSE)
+📄 [[ArXiv]](https://arxiv.org/abs/2409.17481)  |  🎯 [[Project Page]](https://vainf.github.io/maskllm-project-page/)  |  📎 [[License]](LICENSE) |  🤗 [[Hugging Face]](https://huggingface.co/collections/Vinnnf/maskllm-67534df62b9fee030d3239f5) |  👓 [[MaskLLM-4Vision]](https://github.com/VainF/MaskLLM-4V) 
 
 <figure>
   <img src="assets/animation-LQ.gif" alt="MaskLLM" style="width:80%; display:block; margin-left:auto; margin-right:auto;"
@@ -37,17 +37,17 @@ This work introduces MaskLLM, a **learnable** pruning method that establishes **
 </figure>
 </div>
 
-## 1. Pre-trained Masks For Huggingface Models 🔥🔥🔥
+## 1. Pre-trained Masks For Hugging Face Models 🤗🤗🤗
 
 ### Requirements
-We provide pre-computed masks for Huggingface Models such as Llama-2 7B and Llama-3 8B with the minimum requirements. It will not involve docker, Megatron or data preprocessing. 
+We provide pre-computed masks for Hugging Face Models such as Llama-2 7B and Llama-3 8B with the minimum requirements. It will not involve docker, Megatron or data preprocessing. 
 ```bash
 pip install transformers accelerate datasets SentencePiece 
 ```
 
 ### Pre-computed Masks
 
-The following masks were trained and provided by [@VainF](https://github.com/VainF). We use ``huggingface_hub`` to automatically download those masks and apply them to offcical LLMs for evaluation. Those mask files were compressed using [numpy.savez_compressed](tool_compress_mask.py). More results for baselines (SparseGPT, Wanda) can be found in the appendix.
+The following masks were trained and provided by [@VainF](https://github.com/VainF). We use ``huggingface_hub`` to automatically download those masks and apply them to official LLMs for evaluation. Those mask files were compressed using [numpy.savez_compressed](tool_compress_mask.py). More results for baselines (SparseGPT, Wanda) can be found in the appendix.
 | Model | Pattern | Training Data | Training/Eval SeqLen | PPL (Dense) | PPL (SparseGPT) | **PPL (MaskLLM)** | Link |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | LLaMA-2 7B | 2:4 | C4 (2B Tokens)| 4096 | 5.12 | 10.42 | **6.78** | [HuggingFace](https://huggingface.co/Vinnnf/LLaMA-2-7B-MaskLLM-C4) |

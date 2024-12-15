@@ -10,7 +10,7 @@ python scripts/data/download_c4.py
 
 Output
 ```
-assets/data
+assets/data/c4
 ├── ...
 └── en
     ├── c4-train.00000-of-01024.json
@@ -35,7 +35,7 @@ assets/data
 
 ### Requirements
 
-We use [``pytorch:24.01-py3``](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-24-01.html) as the base image. Please make sure you have installed docker.
+We use [``pytorch:24.01-py3``](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-24-01.html) as the base image. Please make sure you have installed docker. More details can be found in [NVIDIA/Megatron-LM](https://github.com/NVIDIA/Megatron-LM?tab=readme-ov-file#data-preprocessing).
 
 Install additional packages:
 ```bash
@@ -49,7 +49,7 @@ bash scripts/data/prepare_c4_megatron_llama2.py
 ```
 
 ```bash
-assets/data/preprocessed/
+assets/data/c4_llama2_pretokenized/
 ├── c4_llama2_00000_text_document.bin
 ├── c4_llama2_00000_text_document.idx
 ├── c4_llama2_00001_text_document.bin
@@ -63,7 +63,7 @@ assets/data/preprocessed/
 ...
 ```
 
-To use this in Megatron-LM, we provide a blending file [assets/c4-blend.sh](../assets/c4-blend.sh) for training. 
+To use this in Megatron-LM, we provide a blending file [assets/c4-blend.sh](../assets/c4-blend-llama2.sh) for training. 
 
 ### Pre-processing for LLaMA-3
 
@@ -74,7 +74,7 @@ bash scripts/data/prepare_c4_megatron_llama3.py
 ```
 
 ```bash
-assets/data/preprocessed_llama3/
+assets/data/c4_llama3_pretokenized/
 ├── c4_llama3_00000_text_document.bin
 ├── c4_llama3_00000_text_document.idx
 ├── c4_llama3_00001_text_document.bin
@@ -88,7 +88,7 @@ assets/data/preprocessed_llama3/
 ...
 ```
 
-The blending file can be also found at [assets/c4-blend-llama3.sh](../assets/c4-blend-llama3.sh). 
+The blending file can also be found at [assets/c4-blend-llama3.sh](../assets/c4-blend-llama3.sh). 
 
 
 ### Pre-processing for LLaMA-3.1
