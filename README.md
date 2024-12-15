@@ -24,8 +24,6 @@
 </div>
  
 
-
-
 ## 0. What is MaskLLM
 
 This work introduces MaskLLM, a **learnable** pruning method that establishes **Semi-structured (or ``N:M'') Sparsity** in LLMs, aimed at reducing computational overhead during inference. The proposed method is scalable and stands to benefit from larger training datasets.
@@ -54,23 +52,26 @@ The following masks were trained and provided by [@VainF](https://github.com/Vai
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | LLaMA-2 7B | 2:4 | C4 (2B Tokens)| 4096 | 5.12 | 10.42 | **6.78** | [HuggingFace](https://huggingface.co/Vinnnf/LLaMA-2-7B-MaskLLM-C4) |
 | LLaMA-3 8B | 2:4 | C4 (2B Tokens) | 4096 | 5.75 | 17.64 | **8.49** | [HuggingFace](https://huggingface.co/Vinnnf/LLaMA-3-8B-MaskLLM-C4) |
-| LLaMA-3.1 8B | 2:4 | C4 (2B Tokens) | 4096 | - | - | - | Comming Soon |
+| LLaMA-3.1 8B | 2:4 | C4 (2B Tokens) | 4096 | 5.89 | 18.65 | **8.58** | [HuggingFace](https://huggingface.co/Vinnnf/LLaMA-3.1-8B-MaskLLM-C4) |
 
 ```bash
+# LLaMA-2 7B, Wikitext-2 PPL=6.78
+python eval_llama_ppl.py --model meta-llama/Llama-2-7b-hf --mask Vinnnf/LLaMA-2-7B-MaskLLM-C4
+
 # LLaMA-3 8B, Wikitext-2 PPL=8.49
 python eval_llama_ppl.py --model meta-llama/Meta-Llama-3-8B --mask Vinnnf/LLaMA-3-8B-MaskLLM-C4
 
-# LLaMA-2 7B, Wikitext-2 PPL=6.78
-python eval_llama_ppl.py --model meta-llama/Llama-2-7b-hf --mask Vinnnf/LLaMA-2-7B-MaskLLM-C4
+# LlaMa-3.1 8B, Wikitext-2 PPL=8.58
+python eval_llama_ppl.py --model meta-llama/Meta-Llama-3.1-8B --mask Vinnnf/LLaMA-3.1-8B-MaskLLM-C4
 ```
 
-Output:
+Output (LlaMa-3.1 8B):
 ```bash
-torch 2.5.1
-transformers 4.44.2
-accelerate 0.33.0
+torch 2.2.0a0+81ea7a4
+transformers 4.47.0
+accelerate 1.2.0
 # of gpus:  8
-loading llm model meta-llama/Meta-Llama-3-8B
+loading llm model meta-llama/Meta-Llama-3.1-8B
 Loading checkpoint shards: 100%|█████████| 4/4 [00:06<00:00,  1.74s/it]
 mask_compressed.npz: 100%|█████████| 591M/591M [00:51<00:00, 11.6MB/s
 ...
@@ -85,7 +86,7 @@ evaluating on wikitext2
 nsamples 70
 sample 0
 sample 50
-wikitext perplexity 8.485933303833008
+wikitext perplexity 8.578034400939941
 ```
 
 More masks learned on public datasets will be released in the future.
@@ -239,17 +240,20 @@ For inference, we only need those winner masks with the highest probability. The
 ```bash
 python tool_trim_learnable_sparsity.py --ckpt_dir output/checkpoints/llama2-7b-tp8-mask-only-c4-singlenode/train_iters_2000/ckpt/iter_0002000 
 ```
-Please modify the content in ``latest_checkpointed_iteration.txt`` as ``release`` for loading. This will set up a clean checkpoint with additional ``.mask`` parameters for each sparse layer.
+The script will create a new checkpoint named `release` and update the pointer to the latest checkpoint in ``latest_checkpointed_iteration.txt``.
 
 ### 2.7 To evaluate the MaskLLM model:
 ```bash
-# For llama2 7b & 13b
+# Llama-2 7b & 13b
 bash scripts/ppl/evaluate_llama2_wikitext2.sh output/checkpoints/llama2-7b-tp8-mask-only-c4-singlenode/train_iters_2000/ckpt/ 7b 8 sparse
 
 bash scripts/ppl/evaluate_llama2_wikitext2.sh output/checkpoints/llama2-13b-tp8-mask-only-c4-singlenode/train_iters_2000/ckpt/ 13b 8 sparse
 
-# For llama3 8b
+# Llama-3 8b
 bash scripts/ppl/evaluate_llama3_wikitext2.sh output/checkpoints/llama3-8b-tp8-mask-only-c4-singlenode/train_iters_2000/ckpt/ 8b 8 sparse
+
+# Llama-3.1 8b
+bash scripts/ppl/evaluate_llama3.1_wikitext2.sh output/checkpoints/llama3.1-8b-tp8-mask-only-c4-singlenode/train_iters_2000/ckpt/ 8b 8 sparse
 ```
 
 ### 2.8 Export to HF (Optional)
@@ -264,7 +268,7 @@ Please see [docs/export_hf.md](docs/export_hf.md) for instructions on exporting 
 
 ```bibtex
 @article{fang2024maskllm,
-  title={MaskLLM: Learnable Semi-Structured Sparsity for Large Language Models},
+  title={Maskllm: Learnable semi-structured sparsity for large language models},
   author={Fang, Gongfan and Yin, Hongxu and Muralidharan, Saurav and Heinrich, Greg and Pool, Jeff and Kautz, Jan and Molchanov, Pavlo and Wang, Xinchao},
   journal={arXiv preprint arXiv:2409.17481},
   year={2024}

@@ -3,10 +3,9 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Trim Lana checkpoint')
 parser.add_argument('--ckpt_dir', type=str, default='output/checkpoints/gpt3-843m-mask-only-simple-no-async-grad/train_iters_2000/ckpt/iter_0002000', help='Input checkpoint')
-parser.add_argument('--output_dir', type=str, default='None', help='Output checkpoint')
 args = parser.parse_args()
 
-def trim_lana_ckpt(input, output):
+def apply_sparsity(input, output):
     ckpt = torch.load(input, map_location='cpu')
     new_encoder_state_dict = {}
     mask_options = torch.zeros(1, 6, 4, dtype=torch.float32)
@@ -39,17 +38,24 @@ def trim_lana_ckpt(input, output):
 import os
 import glob
 
+if args.ckpt_dir.endswith('/'):
+    args.ckpt_dir = args.ckpt_dir[:-1]
 splited_dir = args.ckpt_dir.split('/') 
-args.output_dir = os.path.join('/'.join(splited_dir[:-1]), 'iter_0000001/')
-print(f"output_dir: {args.output_dir}")
-os.makedirs(args.output_dir, exist_ok=True)
+output_dir = os.path.join('/'.join(splited_dir[:-1]), 'iter_0000001')
+print(f"output_dir: {output_dir}")
+os.makedirs(output_dir, exist_ok=True)
 mp_rank_dirs = glob.glob(os.path.join(args.ckpt_dir, "mp_rank_*"))
 for mp_rank_dir in mp_rank_dirs:
     ckpt_file = os.path.join(mp_rank_dir, "model_optim_rng.pt")
-    output_file  = ckpt_file.replace(args.ckpt_dir, args.output_dir)
+    output_file  = ckpt_file.replace(args.ckpt_dir, output_dir)
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    print(f"Trim {ckpt_file} to {output_file}")
-    trim_lana_ckpt(ckpt_file, output_file)
+    apply_sparsity(ckpt_file, output_file)
+
+iteration_file = os.path.join( *splited_dir[:-1], 'latest_checkpointed_iteration.txt')
+print(iteration_file)
+with open(iteration_file, 'w') as f:
+    f.write("1")
+
 
 
             
