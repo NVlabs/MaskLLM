@@ -93,11 +93,11 @@ More masks learned on public datasets will be released in the future.
 
 ## 2. Run MaskLLM with Megatron-LM 🚀🚀🚀
 
-The following section provides an example for MaskLLM-LLaMA-2/3 on a single node with 8 GPUs. The LLaMA model will be shard across 8 GPUs with tensor parallelism, taking ~40GB per GPU for end-to-end training. 
+The following section provides an example of MaskLLM-LLaMA-2/3 on a single node with 8 GPUs. The LLaMA model will be shared across 8 GPUs with tensor parallelism, taking ~40GB per GPU for end-to-end training. 
 
 ### 2.1 Docker Image
 
-Docker is required for Megatron-LM. We use the official PyTorch docker image [``pytorch:24.01-py3``](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-24-01.html) from NVIDIA NGC as the base image. If you can not use docker, please refer to the [official setup instructions in Megatron-LM](https://github.com/NVIDIA/Megatron-LM?tab=readme-ov-file#setup). Run the following command to download & start the docker container and mount your home directory.
+Docker is required for Megatron-LM. Please install docker with `sudo apt install docker.io` and [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) following the official instructions. We use the docker image [``pytorch:24.01-py3``](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-24-01.html) from NVIDIA NGC as the base image. 
 ```bash
 docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 -v $HOME:$HOME -it --rm nvcr.io/nvidia/pytorch:24.01-py3
 ```
